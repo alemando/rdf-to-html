@@ -1,26 +1,42 @@
-{% extends "index.html" %}
-{% block title %}{{entity}}{% endblock %}
-{% block content %}
+{% extends "index.html" %} {% block title %}{{entity}}{% endblock %} {% block
+content %}
 <div class="row">
-    <div class="col-12" id="title">
-        <h1>{{entity}}</h1>
-        <p>{{iri}}</p>
-    </div>
-    <div class="col-12" id="properties">
-        <table class="table">
-            <tbody>
-            {% for k, v in properties.items() %}
-                <tr>
-                  <td>{{ prefixReplace(sparqlEndpoint, k) | safe }}</td>
-                  <td>
-                    {% for value in v %} 
-                        <p>{{ prefixReplace(sparqlEndpoint, value) | safe }}</p>
-                    {% endfor %}
-                  </td>
-                </tr>
+  <div class="col-12" id="title">
+    <h1>{{entity}}</h1>
+    <p>{{iri}}</p>
+  </div>
+  <div class="col-12" id="properties">
+    <table class="table">
+      <tbody>
+        {% for k, v in properties.items() %}
+        <tr>
+          <td>{{ prefixReplace(sparqlEndpoint, k) | safe }}</td>
+          <td>
+            {% for value in v %}
+            <p>{{ prefixReplace(sparqlEndpoint, value) | safe }}</p>
             {% endfor %}
-            </tbody>
-        </table>
-    </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="col-12"><p class="h4">Inverse Relations</p></div>
+  <div class="col-12" id="inverseProperties">
+    <table class="table table-light">
+      <tbody>
+        {% for k, v in inverseProperties.items() %}
+        <tr>
+          <td>{{ prefixReplace(sparqlEndpoint, k) | safe }}</td>
+          <td>
+            {% for value in v %}
+            <p>{{ prefixReplace(sparqlEndpoint, value) | safe }}</p>
+            {% endfor %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 {% endblock %}

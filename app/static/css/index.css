@@ -2,3 +2,12 @@
     padding-top: 10px;
     padding-bottom: 10px;
 }
+a {
+    text-decoration: none;
+}
+
+table, tr, td{
+    width:100%;
+    table-layout: fixed;
+    overflow-wrap: break-word;
+ }

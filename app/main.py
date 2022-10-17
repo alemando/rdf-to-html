@@ -14,7 +14,6 @@ DEFAULT_IRI_NAMESPACE = os.getenv("DEFAULT_IRI_NAMESPACE", "")
 DEFAULT_ENTITY = os.getenv("DEFAULT_ENTITY", "")
 
 
-
 app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -22,13 +21,20 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 templates.env.globals.update(prefixReplace=prefixReplace)
 
+
 @app.get(
     "/",
     response_class=HTMLResponse,
 )
-async def root(request: Request, sparqlendpoint:str = DEFAULT_SPARQL_ENDPOINT, iri: str = DEFAULT_IRI_NAMESPACE, entity: str = None):
+async def root(
+    request: Request,
+    sparqlendpoint: str = DEFAULT_SPARQL_ENDPOINT,
+    iri: str = DEFAULT_IRI_NAMESPACE,
+    entity: str = None,
+):
     if entity:
         response = await getSparqlData(sparqlendpoint, iri, entity)
+        responseInverse = await getInverseSparqlData(sparqlendpoint, iri, entity)
         iri = f"<{iri}{entity}>"
         return templates.TemplateResponse(
             "resource.html",
@@ -38,6 +44,7 @@ async def root(request: Request, sparqlendpoint:str = DEFAULT_SPARQL_ENDPOINT, i
                 "iri": iri,
                 "entity": entity,
                 "properties": response,
+                "inverseProperties": responseInverse,
             },
         )
     else:
@@ -49,4 +56,4 @@ async def root(request: Request, sparqlendpoint:str = DEFAULT_SPARQL_ENDPOINT, i
                 "iri": DEFAULT_IRI_NAMESPACE,
                 "entity": DEFAULT_ENTITY,
             },
-        ) 
+        )
